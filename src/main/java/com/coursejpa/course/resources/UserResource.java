@@ -1,20 +1,34 @@
 package com.coursejpa.course.resources;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coursejpa.course.entities.User;
+import com.coursejpa.course.services.UserService;
 
 @RestController
 @RequestMapping(value = "/users") //mapeando direcionamento de site
 public class UserResource {
 
+	@Autowired
+	private UserService service;
+	
 	@GetMapping
-	public ResponseEntity<User> findAll() {
-		User u = new User(1L, "Lorrany", "lorrany@gmail.com", "985660255", "41253");
+	public ResponseEntity<List<User>> findAll() {
+		List<User> list = service.findAll();
 		
-		return ResponseEntity.ok().body(u);
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<User> findById(@PathVariable Long id) {
+		User obj = service.findByid(id);
+		return ResponseEntity.ok().body(obj);
 	}
 }
